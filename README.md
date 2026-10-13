@@ -57,3 +57,13 @@ The menu and settings are sample data. Changes remain local to that browser prof
 ## First acceptance goals
 
 Before any live deployment, demonstrate that the hub can save an order while the internet is disconnected, restart without losing that order, queue its kitchen ticket, synchronize the event once internet returns, and restore successfully from an encrypted backup. Also verify that the payment state never becomes paid without confirmed payment-provider evidence.
+
+
+## Preview link
+
+- **Instant design preview (third-party HTML preview):** https://html-preview.github.io/?url=https://github.com/mahlikakopiofficial-stack/POS/blob/feat/tablet-pos-ui-prototype/index.html
+- **Stable GitHub Pages URL after Pages is enabled and the deployment succeeds:** https://mahlikakopiofficial-stack.github.io/POS/
+
+To enable the stable Pages URL, open repository **Settings → Pages**, set the source to **GitHub Actions**, then open **Actions** and rerun or run **POS preview deployment**. The workflow runs a basic JavaScript/UI smoke check before publishing.
+
+**Preview safety:** this is unconnected demo software. Do not enter real customer data, staff PINs or payment details. The external HTML preview uses a third-party rendering service; use GitHub Pages for the preferred stable review link.
