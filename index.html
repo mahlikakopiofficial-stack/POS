@@ -151,8 +151,9 @@ function renderCart(){
 }
 function addItem(itemId){
   const product=state.menu.find(p=>p.id===itemId);if(!product||!product.available)return;
+  const route=state.settings.routing[product.category]||product.route||"Kitchen Printer";
   const existing=state.cart.find(l=>l.id===itemId);
-  if(existing)existing.qty++;else state.cart.push({id:product.id,name:product.name,price:product.price,qty:1,category:product.category,route:product.route});
+  if(existing){existing.qty++;existing.route=route;}else state.cart.push({id:product.id,name:product.name,price:product.price,qty:1,category:product.category,route:route});
   persist();renderPOS();
 }
 function orderContext(){
@@ -162,7 +163,7 @@ function createOrder(paymentMode){
   if(!state.cart.length){notify("Add an item before sending the order.");return}
   if(state.selectedType==="Delivery"&&!((document.getElementById("deliveryAddress")||{}).value||"").trim()){notify("Enter the delivery address or area.");return}
   const context=orderContext();
-  const method=paymentMode||state.paymentMethod;
+  const method=paymentMode==="kitchen"?"Pay later":(paymentMode||state.paymentMethod);
   const paid=method==="Cash";
   const now=new Date().toISOString();
   const number="R"+String(state.nextOrder++).padStart(4,"0");
