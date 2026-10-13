@@ -61,6 +61,8 @@ const defaults={
     autoPrintReceipt:true, autoPrintKitchen:true, requireManagerRefund:true
   },
   categories:["Meals","Rice","Drinks","Desserts"],
+  draftContext:{customerName:"",deliveryAddress:"",note:""},
+  extraStaff:[],
   menu:[
     {id:"m1",name:"Chicken Adobo",category:"Meals",price:1.500,emoji:"🍗",description:"Garlic, soy and vinegar",route:"Category default",available:true},
     {id:"m2",name:"Beef Bopis",category:"Meals",price:1.750,emoji:"🥘",description:"Filipino-style beef dish",route:"Category default",available:true},
@@ -88,7 +90,10 @@ function load(){
       settings:Object.assign(structuredClone(defaults.settings),saved.settings||{}),
       menu:Array.isArray(saved.menu)?saved.menu:structuredClone(defaults.menu),
       categories:Array.isArray(saved.categories)?saved.categories:structuredClone(defaults.categories),
-      orders:Array.isArray(saved.orders)?saved.orders:[],cart:Array.isArray(saved.cart)?saved.cart:[]
+      orders:Array.isArray(saved.orders)?saved.orders:[],cart:Array.isArray(saved.cart)?saved.cart:[],
+      draftContext:Object.assign({},defaults.draftContext,saved.draftContext||{}),
+      extraStaff:Array.isArray(saved.extraStaff)?saved.extraStaff:[],
+      nextOrder:Number.isInteger(saved.nextOrder)&&saved.nextOrder>0?saved.nextOrder:1
     });
   }catch(e){return structuredClone(defaults)}
 }
@@ -101,19 +106,19 @@ function localDayKey(d){return new Intl.DateTimeFormat("en-CA",{timeZone:state.s
 function fmtTime(iso){try{return new Date(iso).toLocaleTimeString("en-KW",{timeZone:state.settings.timezone||"Asia/Kuwait",hour:"2-digit",minute:"2-digit"})}catch(e){return "—"}}
 function getTotals(items){
   const subtotal=items.reduce((sum,line)=>sum+Math.round(Number(line.price)*1000)*line.qty,0)/1000;
-  const tax=state.settings.taxEnabled?Math.round(subtotal*Number(state.settings.taxRate||0))/100:0;
-  const service=state.settings.serviceEnabled?Math.round(subtotal*Number(state.settings.serviceRate||0))/100:0;
+  const tax=state.settings.taxEnabled?Math.round(subtotal*Number(state.settings.taxRate||0)*10)/1000:0;
+  const service=state.settings.serviceEnabled?Math.round(subtotal*Number(state.settings.serviceRate||0)*10)/1000:0;
   return {subtotal,tax,service,total:Math.round((subtotal+tax+service)*1000)/1000};
 }
 function notify(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),3000)}
 function updateHeader(){
   const isOnline=navigator.onLine;
   const network=document.getElementById("networkStatus");
-  network.innerHTML='<span class="dot '+(isOnline?"":"off")+'"></span><span>'+(isOnline?"Internet available":"Internet offline · local mode")+'</span>';
+  network.innerHTML='<span class="dot '+(isOnline?"":"off")+'"></span><span>'+(isOnline?"Browser online · demo only":"Browser offline · demo mode")+'</span>';
   const pending=state.orders.filter(o=>!o.synced).length;
   document.getElementById("syncLabel").textContent=pending+" local order"+(pending===1?"":"s")+" · cloud not connected";
 }
-const titles={pos:["Cashier","Take orders quickly. The local hub keeps the service running."],kitchen:["Kitchen","Incoming tickets, preparation status and order corrections."],menu:["Menu editor","Manage products, categories, prices, availability and kitchen routing."],reports:["Reports","Local demo reports. Cloud reporting is not connected yet."],settings:["Settings","Configure restaurant, printers, charges, staff rules and local backup."]};
+const titles={pos:["Cashier","Design preview only. The local POS hub is not connected yet."],kitchen:["Kitchen","Incoming tickets, preparation status and order corrections."],menu:["Menu editor","Manage products, categories, prices, availability and kitchen routing."],reports:["Reports","Local demo reports. Cloud reporting is not connected yet."],settings:["Settings","Configure restaurant, printers, charges, staff rules and local backup."]};
 function switchView(view){
   state.view=view;persist();
   document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.id==="view-"+view));
@@ -146,8 +151,8 @@ function renderCart(){
   const items=state.cart;
   const totals=getTotals(items);
   const lines=items.map(line=>'<div class="cart-line"><div><div class="cart-item-name">'+escapeHtml(line.name)+'</div><div class="cart-item-sub">'+money(line.price)+' each</div><div class="qty-tools"><button class="qty-btn" data-action="qty" data-id="'+escapeHtml(line.id)+'" data-delta="-1" aria-label="Decrease">−</button><span class="qty">'+line.qty+'</span><button class="qty-btn" data-action="qty" data-id="'+escapeHtml(line.id)+'" data-delta="1" aria-label="Increase">+</button><button class="btn small" style="padding:4px 6px;min-height:24px" data-action="remove-line" data-id="'+escapeHtml(line.id)+'">Remove</button></div></div><div class="line-total">'+money(line.price*line.qty)+'</div></div>').join("");
-  const context=state.selectedType==="Delivery"?'<div class="field"><label for="customerName">Customer name</label><input id="customerName" placeholder="Customer name"></div><div class="field"><label for="deliveryAddress">Delivery address / area</label><input id="deliveryAddress" placeholder="Address or area"></div>':'<div class="field"><label for="customerName">Customer / reference (optional)</label><input id="customerName" placeholder="'+(state.selectedType==="Dine-in"?"Customer name":"Pickup name")+'"></div>';
-  return '<aside class="panel cart-pane"><div class="cart-title"><div><h2>Current order</h2><div class="order-number">'+(state.selectedType==="Dine-in"?"Table "+escapeHtml(state.selectedTable):state.selectedType)+" · New order"+'</div></div><button class="btn small" data-action="clear-cart" '+(!items.length?"disabled":"")+'>Clear</button></div><div class="cart-body"><div class="cart-items">'+(lines||'<div class="cart-empty"><div class="empty-icon">🧾</div><b>No items yet</b><br>Choose a menu item to start an order.</div>')+'</div><div class="cart-context">'+context+'<div class="field"><label for="orderNote">Order note / kitchen instructions</label><input id="orderNote" placeholder="e.g. no onion, extra sauce"></div></div><div class="summary"><div class="sum-line"><span>Subtotal</span><span>'+money(totals.subtotal)+'</span></div>'+(state.settings.taxEnabled?'<div class="sum-line"><span>Tax ('+Number(state.settings.taxRate||0)+'%)</span><span>'+money(totals.tax)+'</span></div>':'')+(state.settings.serviceEnabled?'<div class="sum-line"><span>Service ('+Number(state.settings.serviceRate||0)+'%)</span><span>'+money(totals.service)+'</span></div>':'')+'<div class="sum-line total"><span>Total</span><span>'+money(totals.total)+'</span></div></div><div class="pay-row"><label class="label" for="paymentMethod">Payment</label><select class="input" id="paymentMethod" style="padding:8px;font-size:11px"><option '+(state.paymentMethod==="Cash"?"selected":"")+' value="Cash">Cash</option><option '+(state.paymentMethod==="Card terminal (test)"?"selected":"")+' value="Card terminal (test)">Card terminal (test)</option><option '+(state.paymentMethod==="Pay later"?"selected":"")+' value="Pay later">Pay later</option></select></div><div class="cart-actions"><button class="btn soft" data-action="send-kitchen" '+(!items.length?"disabled":"")+'><span>♨</span> Send to kitchen</button><button class="btn primary" data-action="charge-send" '+(!items.length?"disabled":"")+'><span>✓</span> Charge & send</button></div><div class="help" style="margin-top:9px">Card option is test-only. No real payment is processed in this prototype.</div></div></aside>';
+  const context=state.selectedType==="Delivery"?'<div class="field"><label for="customerName">Customer name</label><input id="customerName" value="'+escapeHtml(state.draftContext.customerName)+'" placeholder="Customer name"></div><div class="field"><label for="deliveryAddress">Delivery address / area</label><input id="deliveryAddress" value="'+escapeHtml(state.draftContext.deliveryAddress)+'" placeholder="Address or area"></div>':'<div class="field"><label for="customerName">Customer / reference (optional)</label><input id="customerName" value="'+escapeHtml(state.draftContext.customerName)+'" placeholder="'+(state.selectedType==="Dine-in"?"Customer name":"Pickup name")+'"></div>';
+  return '<aside class="panel cart-pane"><div class="cart-title"><div><h2>Current order</h2><div class="order-number">'+(state.selectedType==="Dine-in"?"Table "+escapeHtml(state.selectedTable):state.selectedType)+" · New order"+'</div></div><button class="btn small" data-action="clear-cart" '+(!items.length?"disabled":"")+'>Clear</button></div><div class="cart-body"><div class="cart-items">'+(lines||'<div class="cart-empty"><div class="empty-icon">🧾</div><b>No items yet</b><br>Choose a menu item to start an order.</div>')+'</div><div class="cart-context">'+context+'<div class="field"><label for="orderNote">Order note / kitchen instructions</label><input id="orderNote" value="'+escapeHtml(state.draftContext.note)+'" placeholder="e.g. no onion, extra sauce"></div></div><div class="summary"><div class="sum-line"><span>Subtotal</span><span>'+money(totals.subtotal)+'</span></div>'+(state.settings.taxEnabled?'<div class="sum-line"><span>Tax ('+Number(state.settings.taxRate||0)+'%)</span><span>'+money(totals.tax)+'</span></div>':'')+(state.settings.serviceEnabled?'<div class="sum-line"><span>Service ('+Number(state.settings.serviceRate||0)+'%)</span><span>'+money(totals.service)+'</span></div>':'')+'<div class="sum-line total"><span>Total</span><span>'+money(totals.total)+'</span></div></div><div class="pay-row"><label class="label" for="paymentMethod">Payment</label><select class="input" id="paymentMethod" style="padding:8px;font-size:11px"><option '+(state.paymentMethod==="Cash"?"selected":"")+' value="Cash">Cash</option><option '+(state.paymentMethod==="Card terminal (test)"?"selected":"")+' value="Card terminal (test)">Card terminal (test)</option><option '+(state.paymentMethod==="Pay later"?"selected":"")+' value="Pay later">Pay later</option></select></div><div class="cart-actions"><button class="btn soft" data-action="send-kitchen" '+(!items.length?"disabled":"")+'><span>♨</span> Send to kitchen</button><button class="btn primary" data-action="charge-send" '+(!items.length?"disabled":"")+'><span>✓</span> Charge & send</button></div><div class="help" style="margin-top:9px">Card option is test-only. No real payment is processed in this prototype.</div></div></aside>';
 }
 function addItem(itemId){
   const product=state.menu.find(p=>p.id===itemId);if(!product||!product.available)return;
@@ -157,12 +162,12 @@ function addItem(itemId){
   persist();renderPOS();
 }
 function orderContext(){
-  return {customerName:(document.getElementById("customerName")||{}).value||"",deliveryAddress:(document.getElementById("deliveryAddress")||{}).value||"",note:(document.getElementById("orderNote")||{}).value||""};
+  return {customerName:state.draftContext.customerName||"",deliveryAddress:state.draftContext.deliveryAddress||"",note:state.draftContext.note||""};
 }
 function createOrder(paymentMode){
   if(!state.cart.length){notify("Add an item before sending the order.");return}
-  if(state.selectedType==="Delivery"&&!((document.getElementById("deliveryAddress")||{}).value||"").trim()){notify("Enter the delivery address or area.");return}
   const context=orderContext();
+  if(state.selectedType==="Delivery"&&!(context.deliveryAddress||"").trim()){notify("Enter the delivery address or area.");return}
   const method=paymentMode==="kitchen"?"Pay later":(paymentMode||state.paymentMethod);
   const paid=method==="Cash";
   const now=new Date().toISOString();
@@ -170,7 +175,7 @@ function createOrder(paymentMode){
   const items=state.cart.map(l=>Object.assign({},l));
   const totals=getTotals(items);
   const order={id:id(),number,type:state.selectedType,table:state.selectedType==="Dine-in"?state.selectedTable:null,customerName:context.customerName,deliveryAddress:context.deliveryAddress,note:context.note,items,subtotal:totals.subtotal,tax:totals.tax,service:totals.service,total:totals.total,createdAt:now,status:"new",paymentStatus:paid?"paid":(method==="Card terminal (test)"?"test-pending":"unpaid"),paymentMethod:method,paidAt:paid?now:null,synced:false,printStatus:{kitchen:"queued",receipt:paid&&state.settings.autoPrintReceipt?"queued":"not-requested"}};
-  state.orders.unshift(order);state.cart=[];persist();
+  state.orders.unshift(order);state.cart=[];state.draftContext={customerName:"",deliveryAddress:"",note:""};persist();
   if(method==="Card terminal (test)"){
     notify("Order "+number+" saved. Test terminal is not connected; payment remains pending.");
   }else if(method==="Pay later"){
@@ -203,7 +208,7 @@ function renderRecentCompleted(){
 function renderMenu(){
   const root=document.getElementById("view-menu");
   const cats=state.categories.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join("");
-  const items=state.menu.map(item=>'<div class="menu-admin-item"><div class="prod-emoji">'+escapeHtml(item.emoji||"🍽️")+'</div><div class="menu-admin-info"><b>'+escapeHtml(item.name)+'</b><span>'+escapeHtml(item.category)+' · '+money(item.price)+' · '+escapeHtml(item.route||"Kitchen")+'</span></div><div class="menu-admin-controls"><button class="pill-switch '+(item.available?"on":"")+'" data-action="toggle-availability" data-id="'+escapeHtml(item.id)+'">'+(item.available?"Available":"Sold out")+'</button><button class="btn small" data-action="edit-item" data-id="'+escapeHtml(item.id)+'">Edit</button></div></div>').join("");
+  const items=state.menu.map(item=>'<div class="menu-admin-item"><div class="prod-emoji">'+escapeHtml(item.emoji||"🍽️")+'</div><div class="menu-admin-info"><b>'+escapeHtml(item.name)+'</b><span>'+escapeHtml(item.category)+' · '+money(item.price)+' · '+escapeHtml(item.route&&item.route!=="Category default"?item.route:(state.settings.routing[item.category]||"Kitchen Printer"))+'</span></div><div class="menu-admin-controls"><button class="pill-switch '+(item.available?"on":"")+'" data-action="toggle-availability" data-id="'+escapeHtml(item.id)+'">'+(item.available?"Available":"Sold out")+'</button><button class="btn small" data-action="edit-item" data-id="'+escapeHtml(item.id)+'">Edit</button></div></div>').join("");
   root.innerHTML='<div class="row-between" style="margin-bottom:16px;flex-wrap:wrap"><div><div class="eyebrow">Product setup</div><h2 style="margin:5px 0 0;font-size:21px">Menu editor</h2><div class="subtitle">Every item can be priced, enabled, and routed to a kitchen destination.</div></div><div class="actions"><button class="btn" data-action="add-category">＋ Category</button><button class="btn primary" data-action="add-item-form">＋ Add menu item</button></div></div><div class="page-grid"><div class="panel"><div class="panel-head"><h3>Menu items</h3><span class="status-tag">'+state.menu.length+' items</span></div><div class="form-section"><div class="menu-admin-grid">'+(items||'<div class="empty-state">No menu items created.</div>')+'</div></div></div><div class="panel"><div class="panel-head"><h3>Quick-add item</h3><span class="badge-demo">Local demo</span></div><form id="addItemForm" class="form-section"><div class="field" style="margin-bottom:12px"><label for="newItemName">Item name</label><input id="newItemName" required maxlength="70" placeholder="e.g. Beef Kare-Kare"></div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label for="newItemPrice">Price (KWD)</label><input id="newItemPrice" required type="number" min="0" step="0.001" placeholder="1.500"></div><div class="field"><label for="newItemCategory">Category</label><select id="newItemCategory">'+cats+'</select></div><div class="field"><label for="newItemEmoji">Icon / emoji</label><input id="newItemEmoji" maxlength="8" value="🍽️"></div><div class="field"><label for="newItemRoute">Kitchen route</label><select id="newItemRoute"><option value="Category default" selected>Category default</option><option>Kitchen Printer</option><option>Drinks Printer</option><option>Dessert Printer</option><option>No print</option></select></div></div><div class="field" style="margin-bottom:14px"><label for="newItemDescription">Description</label><input id="newItemDescription" maxlength="120" placeholder="Optional description"></div><button class="btn primary" type="submit" style="width:100%">Save menu item</button><p class="help">Saved to this browser prototype data. Production menu changes will be stored by the local hub.</p></form><div class="form-section"><h3 class="section-title">Categories</h3><div class="actions">'+state.categories.map(c=>'<span class="status-tag">'+escapeHtml(c)+'</span>').join(" ")+'</div><p class="help">Use Settings → Printing & routing to configure where each category prints.</p></div></div></div>';
 }
 function renderReports(){
@@ -322,7 +327,13 @@ document.addEventListener("click",function(event){
   if(action==="save-settings"){persist();notify("Settings saved.");return}
 });
 document.addEventListener("input",function(event){
-  if(event.target.id==="menuSearch"){state.search=event.target.value;const pos=document.getElementById("view-pos");const start=event.target.selectionStart;renderPOS();const input=document.getElementById("menuSearch");if(input){input.focus();input.setSelectionRange(start,start)}return}
+  if(event.target.id==="menuSearch"){state.search=event.target.value;const start=event.target.selectionStart;renderPOS();const input=document.getElementById("menuSearch");if(input){input.focus();input.setSelectionRange(start,start)}return}
+  if(["customerName","deliveryAddress","orderNote"].includes(event.target.id)){
+    const key=event.target.id==="customerName"?"customerName":event.target.id==="deliveryAddress"?"deliveryAddress":"note";
+    state.draftContext[key]=event.target.value;
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){}
+    return
+  }
 });
 document.addEventListener("change",function(event){
   if(event.target.id==="paymentMethod"){state.paymentMethod=event.target.value;return}
@@ -348,7 +359,7 @@ document.getElementById("restoreFile").addEventListener("change",async function(
     const restored=parsed.state||parsed;
     if(!restored||!Array.isArray(restored.menu)||!Array.isArray(restored.orders))throw new Error("Not a RESTAU POS backup");
     if(!confirm("Replace the current browser prototype data with this backup?"))return;
-    state=Object.assign(structuredClone(defaults),restored,{settings:Object.assign(structuredClone(defaults.settings),restored.settings||{})});
+    state=Object.assign(structuredClone(defaults),restored,{settings:Object.assign(structuredClone(defaults.settings),restored.settings||{}),menu:Array.isArray(restored.menu)?restored.menu:structuredClone(defaults.menu),categories:Array.isArray(restored.categories)?restored.categories:structuredClone(defaults.categories),orders:Array.isArray(restored.orders)?restored.orders:[],cart:Array.isArray(restored.cart)?restored.cart:[],draftContext:Object.assign({},defaults.draftContext,restored.draftContext||{}),extraStaff:Array.isArray(restored.extraStaff)?restored.extraStaff:[],nextOrder:Number.isInteger(restored.nextOrder)&&restored.nextOrder>0?restored.nextOrder:1});
     persist();renderView();notify("Prototype backup restored.");
   }catch(e){notify("Restore failed. Choose a valid RESTAU POS JSON backup.")}finally{event.target.value=""}
 });
