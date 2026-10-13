@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4b1725">
+<title>RESTAU POS — Tablet Prototype</title>
+<style>
+:root{--wine:#4b1725;--wine2:#672536;--gold:#d7ae62;--gold2:#f0d69b;--ink:#25232a;--muted:#797783;--line:#e8e4e6;--paper:#fff;--canvas:#f6f4f2;--green:#25765a;--red:#b54345;--blue:#456f9f;--shadow:0 9px 28px rgba(42,24,31,.07)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--canvas)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #d7ae6280;outline-offset:2px}.shell{min-height:100vh;display:grid;grid-template-columns:84px minmax(0,1fr)}.sidebar{background:var(--wine);color:white;padding:20px 10px;display:flex;flex-direction:column;align-items:center;gap:12px;position:sticky;top:0;height:100vh}.brand-mark{width:48px;height:48px;border:1px solid #c99e5c;border-radius:15px;display:grid;place-items:center;color:var(--gold2);font-weight:900;font-size:19px;letter-spacing:-1px;margin-bottom:12px}.nav-btn{border:0;background:transparent;color:#decbd0;width:62px;min-height:61px;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;transition:.15s}.nav-btn .ico{font-size:22px;line-height:1}.nav-btn:hover,.nav-btn.active{background:#ffffff18;color:white}.nav-btn.active{box-shadow:inset 3px 0 var(--gold)}.nav-spacer{flex:1}.main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px;gap:16px;position:sticky;top:0;z-index:5}.page-title{font-size:21px;font-weight:800;letter-spacing:-.45px}.subtitle{font-size:12px;color:var(--muted);margin-top:3px}.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.status-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:11px;font-weight:700;color:#5b5962;background:#fff}.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}.dot.off{background:var(--red)}.cloud-pill{background:#fff7e8;border-color:#f1dfba;color:#805e20}.avatar{width:34px;height:34px;border-radius:12px;background:#f0e4d4;color:var(--wine);display:grid;place-items:center;font-weight:800}.content{padding:22px 24px 30px;max-width:1800px;margin:auto}.view{display:none}.view.active{display:block}.btn{border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:10px 13px;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:39px}.btn:hover{filter:brightness(.98);border-color:#cec6c9}.btn.primary{background:var(--wine);color:#fff;border-color:var(--wine)}.btn.gold{background:var(--gold);border-color:var(--gold);color:#35131c}.btn.soft{background:#f8f2f3;color:var(--wine);border-color:#ead9de}.btn.danger{color:var(--red);background:#fff6f6;border-color:#f2dada}.btn.small{padding:7px 9px;min-height:31px;font-size:11px;border-radius:8px}.btn:disabled{opacity:.45;cursor:not-allowed}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid #f0edef}.panel-head h2,.panel-head h3{margin:0;font-size:14px;letter-spacing:-.15px}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:800}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label,.label{font-size:11px;font-weight:800;color:#5d5861}.field input,.field select,.field textarea,.input{width:100%;background:#fff;border:1px solid #dfdade;border-radius:9px;padding:10px 11px;color:var(--ink);min-width:0;font-size:12px}.field textarea{min-height:78px;resize:vertical}.field small,.help{color:var(--muted);font-size:10px;line-height:1.5}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.form-section{padding:18px}.form-section+.form-section{border-top:1px solid #f0edef}.section-title{font-size:13px;font-weight:800;margin:0 0 14px}.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f1edef}.toggle-row:last-child{border-bottom:0}.toggle-row b{font-size:12px;display:block}.toggle-row small{font-size:10px;color:var(--muted);display:block;margin-top:3px}.switch{width:39px;height:22px;border:0;border-radius:99px;background:#d9d6da;padding:3px;flex-shrink:0}.switch span{width:16px;height:16px;background:white;display:block;border-radius:50%;transition:.15s;box-shadow:0 1px 3px #0002}.switch.on{background:var(--green)}.switch.on span{transform:translateX(17px)}.notice{border:1px solid #f0dfb5;background:#fff9eb;color:#785d2c;border-radius:11px;padding:12px 13px;font-size:11px;line-height:1.55}.muted{color:var(--muted)}.tiny{font-size:10px}.pos-layout{display:grid;grid-template-columns:minmax(0,1fr) 355px;gap:18px;align-items:start}.menu-pane{min-width:0}.pos-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:15px}.segmented{padding:4px;border-radius:12px;background:#ece8e9;display:flex;gap:3px}.segmented button{border:0;background:transparent;border-radius:9px;padding:9px 13px;font-size:11px;font-weight:800;color:#71656b}.segmented button.active{background:#fff;color:var(--wine);box-shadow:0 2px 5px #39162212}.table-strip{display:flex;gap:7px;overflow:auto;padding:2px 0 10px}.table-btn{min-width:52px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:white;color:#67616a;font-size:11px;font-weight:800}.table-btn.active{background:#f8ecef;border-color:#dcbfc7;color:var(--wine)}.search-wrap{position:relative;min-width:190px;flex:1;max-width:300px}.search-wrap input{width:100%;border:1px solid var(--line);padding:10px 12px 10px 34px;border-radius:10px;font-size:12px;background:#fff}.search-icon{position:absolute;left:12px;top:9px;color:#8d8790;font-size:14px}.category-row{display:flex;gap:8px;overflow:auto;padding:2px 0 14px}.cat-chip{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 13px;font-size:11px;font-weight:800;color:#6e6871}.cat-chip.active{background:var(--wine);border-color:var(--wine);color:#fff}.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.product{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;min-height:143px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;box-shadow:0 3px 12px #2b1a2210;transition:transform .15s,border .15s;position:relative;overflow:hidden}.product:hover{transform:translateY(-2px);border-color:#c7aab2}.product-icon{width:39px;height:39px;border-radius:12px;background:#f8eff0;display:grid;place-items:center;font-size:22px;margin-bottom:9px}.product-name{font-size:12px;font-weight:800;line-height:1.35}.product-desc{font-size:10px;color:var(--muted);line-height:1.4;margin-top:4px;min-height:26px}.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-top:auto;padding-top:10px}.price{font-size:14px;font-weight:900;color:var(--wine)}.add-mark{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--wine);color:white;font-weight:800}.product.unavailable{opacity:.45;cursor:not-allowed}.product .route-tag{position:absolute;top:11px;right:10px;font-size:8px;text-transform:uppercase;color:#8a8088;letter-spacing:.4px;font-weight:800}.cart-pane{position:sticky;top:92px;overflow:hidden}.cart-title{display:flex;align-items:center;justify-content:space-between;padding:17px 17px 14px;border-bottom:1px solid #f0edef}.cart-title h2{font-size:15px;margin:0}.order-number{font-size:10px;color:var(--muted);margin-top:4px}.cart-body{padding:14px 16px}.cart-items{display:flex;flex-direction:column;gap:10px;max-height:31vh;overflow:auto}.cart-empty{border:1px dashed #dcd5d9;background:#fcfafb;border-radius:12px;text-align:center;padding:27px 15px;color:var(--muted);font-size:12px;line-height:1.6}.cart-empty .empty-icon{font-size:26px;margin-bottom:6px}.cart-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;border-bottom:1px solid #f2edef;padding-bottom:10px}.cart-item-name{font-size:11px;font-weight:800}.cart-item-sub{font-size:10px;color:var(--muted);margin-top:3px}.qty-tools{display:flex;align-items:center;gap:7px;margin-top:7px}.qty-btn{width:24px;height:24px;border:1px solid var(--line);background:white;border-radius:7px;font-weight:900;color:var(--wine)}.qty{font-size:11px;font-weight:800;min-width:12px;text-align:center}.line-total{font-size:11px;font-weight:900;white-space:nowrap}.cart-context{display:grid;grid-template-columns:1fr;gap:9px;padding:12px 0}.summary{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}.sum-line{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#69636b}.sum-line.total{font-size:16px;font-weight:900;color:var(--wine);padding-top:9px;border-top:1px dashed #e0d9de;margin-top:2px}.cart-actions{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;margin-top:14px}.cart-actions .btn{font-size:11px;padding:10px 8px}.pay-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.pay-row select{max-width:174px}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}.kpi{padding:17px}.kpi-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:700}.kpi-icon{width:34px;height:34px;border-radius:11px;background:#f7edef;color:var(--wine);display:grid;place-items:center;font-size:17px}.kpi-value{font-size:24px;font-weight:900;letter-spacing:-.8px;margin-top:13px}.kpi-foot{font-size:10px;color:var(--muted);margin-top:4px}.kitchen-summary{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:17px}.count-chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:11px;font-weight:800;color:#625c66}.count-chip strong{font-size:14px;color:var(--wine);margin-right:5px}.kitchen-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-items:start}.kitchen-col{background:#f0edee;border-radius:15px;padding:10px;min-height:310px}.kitchen-col-head{display:flex;justify-content:space-between;align-items:center;padding:4px 3px 11px;font-size:12px;font-weight:900}.count{min-width:24px;height:24px;border-radius:8px;background:#fff;display:grid;place-items:center;font-size:10px}.ticket{background:white;border:1px solid #e6dfe3;border-radius:13px;padding:13px;margin-bottom:10px;box-shadow:0 3px 12px #2716200a}.ticket-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.ticket-id{font-size:13px;font-weight:900;color:var(--wine)}.ticket-meta{font-size:10px;color:var(--muted);margin-top:4px}.ticket-type{font-size:9px;letter-spacing:.4px;text-transform:uppercase;font-weight:900;background:#f7eef0;color:var(--wine);padding:5px 7px;border-radius:7px}.ticket-items{border-top:1px dashed #e6dfe3;border-bottom:1px dashed #e6dfe3;margin:11px 0;padding:9px 0;display:flex;flex-direction:column;gap:8px}.ticket-item{display:flex;gap:7px;font-size:11px;line-height:1.4}.ticket-item strong{min-width:18px;color:var(--wine)}.ticket-note{font-size:10px;background:#fff7e9;border-radius:7px;padding:7px;margin-bottom:10px;color:#775b29;line-height:1.4}.ticket-actions{display:flex;gap:6px}.ticket-actions .btn{flex:1;font-size:10px;padding:8px 5px}.empty-column{text-align:center;color:#928992;font-size:11px;padding:34px 10px}.page-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr);gap:16px;align-items:start}.list-table{width:100%;border-collapse:collapse}.list-table th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);text-align:left;background:#fbfafb;padding:12px 15px;border-bottom:1px solid var(--line)}.list-table td{padding:12px 15px;border-bottom:1px solid #f1edef;font-size:11px;vertical-align:middle}.list-table tr:last-child td{border-bottom:0}.status-tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900;background:#f2f0f2;color:#5d5760;white-space:nowrap}.status-tag.green{background:#e8f5ee;color:#267453}.status-tag.amber{background:#fff4d9;color:#876524}.status-tag.red{background:#fff0ef;color:#a33b3d}.menu-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.menu-admin-item{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;background:#fff}.menu-admin-item .prod-emoji{font-size:22px;width:39px;height:39px;background:#f7eef0;border-radius:10px;display:grid;place-items:center;flex-shrink:0}.menu-admin-info{min-width:0;flex:1}.menu-admin-info b{font-size:11px;display:block}.menu-admin-info span{display:block;color:var(--muted);font-size:10px;margin-top:4px}.menu-admin-controls{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.pill-switch{font-size:9px;font-weight:800;border:1px solid var(--line);border-radius:999px;padding:5px 7px;background:#fff}.pill-switch.on{background:#eaf6ee;color:var(--green);border-color:#cde9d7}.settings-grid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}.settings-nav{padding:8px}.settings-tab{border:0;background:transparent;text-align:left;padding:12px 13px;width:100%;display:flex;gap:10px;align-items:center;border-radius:9px;color:#66606a;font-size:12px;font-weight:800}.settings-tab.active{background:#f7ecef;color:var(--wine)}.setting-icon{font-size:16px;width:20px;text-align:center}.settings-content{overflow:hidden}.setting-savebar{padding:13px 18px;border-top:1px solid #f0edef;background:#fdfcfc;display:flex;align-items:center;justify-content:space-between;gap:10px}.staff-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #f1edef}.staff-row:last-child{border-bottom:0}.staff-avatar{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:#f5e8eb;color:var(--wine);font-weight:900;font-size:12px}.staff-text{flex:1}.staff-text b{display:block;font-size:12px}.staff-text small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.toast{position:fixed;right:20px;bottom:20px;background:#28242b;color:white;border-radius:12px;padding:13px 16px;box-shadow:0 10px 30px #0002;z-index:20;font-size:12px;max-width:min(380px,calc(100vw - 40px));opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}.footer-note{padding:20px 0 0;color:#9a939b;font-size:10px;text-align:center}.empty-state{padding:35px;text-align:center;color:var(--muted);font-size:12px}.divider{height:1px;background:#f0edef;margin:12px 0}.row-between{display:flex;align-items:center;justify-content:space-between;gap:12px}.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.badge-demo{font-size:9px;background:#fff2d9;color:#856123;border:1px solid #f0e0bc;border-radius:6px;padding:4px 6px;font-weight:900;text-transform:uppercase;letter-spacing:.3px}
+@media(max-width:1100px){.pos-layout{grid-template-columns:minmax(0,1fr) 320px}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.kitchen-columns{gap:8px}.kitchen-col{padding:7px}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.page-grid{grid-template-columns:1fr}.menu-admin-grid{grid-template-columns:1fr}}
+@media(max-width:780px){.shell{grid-template-columns:62px minmax(0,1fr)}.sidebar{padding:13px 5px}.brand-mark{width:42px;height:42px;border-radius:13px}.nav-btn{width:51px;min-height:55px;font-size:9px}.topbar{height:66px;padding:0 14px}.page-title{font-size:18px}.content{padding:14px}.pos-layout{grid-template-columns:1fr}.cart-pane{position:static;order:2}.cart-items{max-height:none}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.kitchen-columns{grid-template-columns:1fr}.kitchen-col{min-height:0}.settings-grid{grid-template-columns:1fr}.settings-nav{display:flex;overflow:auto;gap:3px}.settings-tab{width:auto;white-space:nowrap}.form-grid.three{grid-template-columns:1fr 1fr}.top-right .cloud-pill{display:none}}
+@media(max-width:480px){.topbar{padding:0 10px}.subtitle{display:none}.status-pill{padding:7px 8px;font-size:10px}.top-right{gap:5px}.avatar{display:none}.content{padding:10px}.form-grid,.form-grid.three{grid-template-columns:1fr}.products{gap:8px}.product{min-height:134px;padding:10px}.product-name{font-size:11px}.kpi-value{font-size:21px}.cart-actions{grid-template-columns:1fr}.pos-controls{align-items:stretch}.search-wrap{max-width:none;min-width:100%}.list-table th,.list-table td{padding:10px 9px}.table-strip{margin-right:-10px}.page-title{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="brand-mark" title="RESTAU">R.</div>
+    <button class="nav-btn active" data-view="pos"><span class="ico">▦</span><span>Cashier</span></button>
+    <button class="nav-btn" data-view="kitchen"><span class="ico">♨</span><span>Kitchen</span></button>
+    <button class="nav-btn" data-view="menu"><span class="ico">☷</span><span>Menu</span></button>
+    <button class="nav-btn" data-view="reports"><span class="ico">▤</span><span>Reports</span></button>
+    <div class="nav-spacer"></div>
+    <button class="nav-btn" data-view="settings"><span class="ico">⚙</span><span>Settings</span></button>
+    <div style="font-size:9px;color:#cbb7be;margin-top:4px">v0.1</div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><div class="page-title" id="pageTitle">Cashier</div><div class="subtitle" id="pageSubtitle">Take orders quickly. The local hub keeps the service running.</div></div>
+      <div class="top-right">
+        <span class="status-pill" id="networkStatus"><span class="dot"></span><span>Network checking</span></span>
+        <span class="status-pill cloud-pill" title="Cloud synchronization is not connected in this prototype">◌ <span id="syncLabel">Local only · cloud pending</span></span>
+        <div class="avatar" title="Demo owner">OW</div>
+      </div>
+    </header>
+    <div class="content">
+      <section class="view active" id="view-pos"></section>
+      <section class="view" id="view-kitchen"></section>
+      <section class="view" id="view-menu"></section>
+      <section class="view" id="view-reports"></section>
+      <section class="view" id="view-settings"></section>
+      <div class="footer-note">RESTAU POS UI prototype · Sample data is stored in this browser only · Not for live sales</div>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="restoreFile" accept="application/json" hidden>
+<script>
+(function(){
+"use strict";
+const STORAGE_KEY="restau-pos-prototype-v1";
+const defaults={
+  settings:{
+    restaurantName:"RESTAU", address:"Salmiya, Kuwait", phone:"", currency:"KWD", timezone:"Asia/Kuwait",
+    receiptPrinterName:"Cashier Receipt Printer", receiptPrinterIp:"192.168.1.101", receiptPrinterEnabled:true,
+    kitchenPrinterName:"Kitchen Printer", kitchenPrinterIp:"192.168.1.102", kitchenPrinterEnabled:true,
+    routing:{Meals:"Kitchen Printer",Rice:"Kitchen Printer",Drinks:"Kitchen Printer",Desserts:"Kitchen Printer"},
+    taxEnabled:false,taxRate:0,serviceEnabled:false,serviceRate:0,rounding:"fils",
+    allowDiscounts:true, requireVoidReason:true, receiptFooter:"Thank you. Please come again.",
+    autoPrintReceipt:true, autoPrintKitchen:true, requireManagerRefund:true
+  },
+  categories:["Meals","Rice","Drinks","Desserts"],
+  menu:[
+    {id:"m1",name:"Chicken Adobo",category:"Meals",price:1.500,emoji:"🍗",description:"Garlic, soy and vinegar",route:"Kitchen Printer",available:true},
+    {id:"m2",name:"Beef Bopis",category:"Meals",price:1.750,emoji:"🥘",description:"Filipino-style beef dish",route:"Kitchen Printer",available:true},
+    {id:"m3",name:"Beef Pinakbet",category:"Meals",price:1.750,emoji:"🍲",description:"Vegetables and beef",route:"Kitchen Printer",available:true},
+    {id:"m4",name:"Chicken Inasal",category:"Meals",price:1.750,emoji:"🍗",description:"Grilled chicken",route:"Kitchen Printer",available:true},
+    {id:"m5",name:"Fried Chicken",category:"Meals",price:1.500,emoji:"🍗",description:"Crispy chicken",route:"Kitchen Printer",available:true},
+    {id:"m6",name:"Chopsuey",category:"Meals",price:1.250,emoji:"🥦",description:"Mixed vegetables",route:"Kitchen Printer",available:true},
+    {id:"m7",name:"Steamed Rice",category:"Rice",price:0.250,emoji:"🍚",description:"One serving",route:"Kitchen Printer",available:true},
+    {id:"m8",name:"Garlic Rice",category:"Rice",price:0.350,emoji:"🍚",description:"Garlic fried rice",route:"Kitchen Printer",available:true},
+    {id:"m9",name:"Mango Juice",category:"Drinks",price:0.500,emoji:"🥭",description:"Chilled mango drink",route:"Kitchen Printer",available:true},
+    {id:"m10",name:"Calamansi Juice",category:"Drinks",price:0.500,emoji:"🍋",description:"Citrus refresher",route:"Kitchen Printer",available:true},
+    {id:"m11",name:"Halo-Halo",category:"Desserts",price:0.750,emoji:"🍨",description:"Filipino mixed dessert",route:"Kitchen Printer",available:true},
+    {id:"m12",name:"Leche Flan",category:"Desserts",price:0.500,emoji:"🍮",description:"Creamy custard dessert",route:"Kitchen Printer",available:true}
+  ],
+  orders:[], cart:[], nextOrder:1, view:"pos", selectedType:"Dine-in", selectedTable:"T01", categoryFilter:"All", search:"",
+  settingsTab:"general", paymentMethod:"Cash"
+};
+let state=load();
+let toastTimer=null;
+function load(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(!saved) return structuredClone(defaults);
+    return Object.assign(structuredClone(defaults),saved,{
+      settings:Object.assign(structuredClone(defaults.settings),saved.settings||{}),
+      menu:Array.isArray(saved.menu)?saved.menu:structuredClone(defaults.menu),
+      categories:Array.isArray(saved.categories)?saved.categories:structuredClone(defaults.categories),
+      orders:Array.isArray(saved.orders)?saved.orders:[],cart:Array.isArray(saved.cart)?saved.cart:[]
+    });
+  }catch(e){return structuredClone(defaults)}
+}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));updateHeader()}catch(e){notify("Could not save browser storage. Export a backup and check available storage.")}}
+function money(value){return (Number(value)||0).toLocaleString("en-KW",{minimumFractionDigits:3,maximumFractionDigits:3})+" KD"}
+function escapeHtml(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function id(){return "id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)}
+function localDate(){return new Date().toLocaleString("en-GB",{timeZone:state.settings.timezone||"Asia/Kuwait",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+function localDayKey(d){return new Intl.DateTimeFormat("en-CA",{timeZone:state.settings.timezone||"Asia/Kuwait",year:"numeric",month:"2-digit",day:"2-digit"}).format(d||new Date())}
+function fmtTime(iso){try{return new Date(iso).toLocaleTimeString("en-KW",{timeZone:state.settings.timezone||"Asia/Kuwait",hour:"2-digit",minute:"2-digit"})}catch(e){return "—"}}
+function getTotals(items){
+  const subtotal=items.reduce((sum,line)=>sum+Math.round(Number(line.price)*1000)*line.qty,0)/1000;
+  const tax=state.settings.taxEnabled?Math.round(subtotal*Number(state.settings.taxRate||0))/100:0;
+  const service=state.settings.serviceEnabled?Math.round(subtotal*Number(state.settings.serviceRate||0))/100:0;
+  return {subtotal,tax,service,total:Math.round((subtotal+tax+service)*1000)/1000};
+}
+function notify(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),3000)}
+function updateHeader(){
+  const isOnline=navigator.onLine;
+  const network=document.getElementById("networkStatus");
+  network.innerHTML='<span class="dot '+(isOnline?"":"off")+'"></span><span>'+(isOnline?"Internet available":"Internet offline · local mode")+'</span>';
+  const pending=state.orders.filter(o=>!o.synced).length;
+  document.getElementById("syncLabel").textContent=pending+" local order"+(pending===1?"":"s")+" · cloud not connected";
+}
+const titles={pos:["Cashier","Take orders quickly. The local hub keeps the service running."],kitchen:["Kitchen","Incoming tickets, preparation status and order corrections."],menu:["Menu editor","Manage products, categories, prices, availability and kitchen routing."],reports:["Reports","Local demo reports. Cloud reporting is not connected yet."],settings:["Settings","Configure restaurant, printers, charges, staff rules and local backup."]};
+function switchView(view){
+  state.view=view;persist();
+  document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.id==="view-"+view));
+  document.querySelectorAll(".nav-btn").forEach(el=>el.classList.toggle("active",el.dataset.view===view));
+  document.getElementById("pageTitle").textContent=titles[view][0];
+  document.getElementById("pageSubtitle").textContent=titles[view][1];
+  renderView();
+}
+function renderView(){
+  if(state.view==="pos") renderPOS();
+  if(state.view==="kitchen") renderKitchen();
+  if(state.view==="menu") renderMenu();
+  if(state.view==="reports") renderReports();
+  if(state.view==="settings") renderSettings();
+  updateHeader();
+}
+function categoryList(){return ["All"].concat(state.categories)}
+function renderPOS(){
+  const root=document.getElementById("view-pos");
+  const categories=categoryList();
+  const filtered=state.menu.filter(item=>(state.categoryFilter==="All"||item.category===state.categoryFilter)&&(!state.search||item.name.toLowerCase().includes(state.search.toLowerCase())||item.description.toLowerCase().includes(state.search.toLowerCase())));
+  const typeButtons=["Dine-in","Takeaway","Delivery"].map(t=>'<button class="'+(state.selectedType===t?"active":"")+'" data-action="order-type" data-type="'+t+'">'+t+'</button>').join("");
+  const cats=categories.map(c=>'<button class="cat-chip '+(state.categoryFilter===c?"active":"")+'" data-action="category-filter" data-category="'+escapeHtml(c)+'">'+escapeHtml(c)+'</button>').join("");
+  const products=filtered.map(item=>'<button class="product '+(!item.available?"unavailable":"")+'" data-action="add-item" data-id="'+escapeHtml(item.id)+'" '+(!item.available?"disabled":"")+'><span class="route-tag">'+escapeHtml(item.route||"Kitchen")+'</span><span class="product-icon">'+escapeHtml(item.emoji||"🍽️")+'</span><span class="product-name">'+escapeHtml(item.name)+'</span><span class="product-desc">'+escapeHtml(item.available?item.description:"Currently unavailable")+'</span><span class="product-bottom"><span class="price">'+money(item.price)+'</span><span class="add-mark">'+(item.available?"+":"—")+'</span></span></button>').join("");
+  const tableBlock=state.selectedType==="Dine-in"?'<div class="table-strip">'+Array.from({length:12},(_,i)=>"T"+String(i+1).padStart(2,"0")).map(t=>'<button class="table-btn '+(state.selectedTable===t?"active":"")+'" data-action="select-table" data-table="'+t+'">'+t+'</button>').join("")+'</div>':"";
+  const cart=renderCart();
+  root.innerHTML='<div class="pos-layout"><div class="menu-pane"><div class="pos-controls"><div class="segmented">'+typeButtons+'</div><div class="search-wrap"><span class="search-icon">⌕</span><input id="menuSearch" value="'+escapeHtml(state.search)+'" placeholder="Search menu items…" aria-label="Search menu items"></div></div>'+tableBlock+'<div class="category-row">'+cats+'</div><div class="row-between" style="margin:0 0 11px"><div class="eyebrow">Menu items <span style="font-weight:600;text-transform:none;letter-spacing:0">('+filtered.length+')</span></div><span class="tiny muted">Tap a card to add to order</span></div><div class="products">'+(products||'<div class="empty-state">No matching items. Add products in Menu.</div>')+'</div></div>'+cart+'</div>';
+}
+function renderCart(){
+  const items=state.cart;
+  const totals=getTotals(items);
+  const lines=items.map(line=>'<div class="cart-line"><div><div class="cart-item-name">'+escapeHtml(line.name)+'</div><div class="cart-item-sub">'+money(line.price)+' each</div><div class="qty-tools"><button class="qty-btn" data-action="qty" data-id="'+escapeHtml(line.id)+'" data-delta="-1" aria-label="Decrease">−</button><span class="qty">'+line.qty+'</span><button class="qty-btn" data-action="qty" data-id="'+escapeHtml(line.id)+'" data-delta="1" aria-label="Increase">+</button><button class="btn small" style="padding:4px 6px;min-height:24px" data-action="remove-line" data-id="'+escapeHtml(line.id)+'">Remove</button></div></div><div class="line-total">'+money(line.price*line.qty)+'</div></div>').join("");
+  const context=state.selectedType==="Delivery"?'<div class="field"><label for="customerName">Customer name</label><input id="customerName" placeholder="Customer name"></div><div class="field"><label for="deliveryAddress">Delivery address / area</label><input id="deliveryAddress" placeholder="Address or area"></div>':'<div class="field"><label for="customerName">Customer / reference (optional)</label><input id="customerName" placeholder="'+(state.selectedType==="Dine-in"?"Customer name":"Pickup name")+'"></div>';
+  return '<aside class="panel cart-pane"><div class="cart-title"><div><h2>Current order</h2><div class="order-number">'+(state.selectedType==="Dine-in"?"Table "+escapeHtml(state.selectedTable):state.selectedType)+" · New order"+'</div></div><button class="btn small" data-action="clear-cart" '+(!items.length?"disabled":"")+'>Clear</button></div><div class="cart-body"><div class="cart-items">'+(lines||'<div class="cart-empty"><div class="empty-icon">🧾</div><b>No items yet</b><br>Choose a menu item to start an order.</div>')+'</div><div class="cart-context">'+context+'<div class="field"><label for="orderNote">Order note / kitchen instructions</label><input id="orderNote" placeholder="e.g. no onion, extra sauce"></div></div><div class="summary"><div class="sum-line"><span>Subtotal</span><span>'+money(totals.subtotal)+'</span></div>'+(state.settings.taxEnabled?'<div class="sum-line"><span>Tax ('+Number(state.settings.taxRate||0)+'%)</span><span>'+money(totals.tax)+'</span></div>':'')+(state.settings.serviceEnabled?'<div class="sum-line"><span>Service ('+Number(state.settings.serviceRate||0)+'%)</span><span>'+money(totals.service)+'</span></div>':'')+'<div class="sum-line total"><span>Total</span><span>'+money(totals.total)+'</span></div></div><div class="pay-row"><label class="label" for="paymentMethod">Payment</label><select class="input" id="paymentMethod" style="padding:8px;font-size:11px"><option '+(state.paymentMethod==="Cash"?"selected":"")+' value="Cash">Cash</option><option '+(state.paymentMethod==="Card terminal (test)"?"selected":"")+' value="Card terminal (test)">Card terminal (test)</option><option '+(state.paymentMethod==="Pay later"?"selected":"")+' value="Pay later">Pay later</option></select></div><div class="cart-actions"><button class="btn soft" data-action="send-kitchen" '+(!items.length?"disabled":"")+'><span>♨</span> Send to kitchen</button><button class="btn primary" data-action="charge-send" '+(!items.length?"disabled":"")+'><span>✓</span> Charge & send</button></div><div class="help" style="margin-top:9px">Card option is test-only. No real payment is processed in this prototype.</div></div></aside>';
+}
+function addItem(itemId){
+  const product=state.menu.find(p=>p.id===itemId);if(!product||!product.available)return;
+  const existing=state.cart.find(l=>l.id===itemId);
+  if(existing)existing.qty++;else state.cart.push({id:product.id,name:product.name,price:product.price,qty:1,category:product.category,route:product.route});
+  persist();renderPOS();
+}
+function orderContext(){
+  return {customerName:(document.getElementById("customerName")||{}).value||"",deliveryAddress:(document.getElementById("deliveryAddress")||{}).value||"",note:(document.getElementById("orderNote")||{}).value||""};
+}
+function createOrder(paymentMode){
+  if(!state.cart.length){notify("Add an item before sending the order.");return}
+  if(state.selectedType==="Delivery"&&!((document.getElementById("deliveryAddress")||{}).value||"").trim()){notify("Enter the delivery address or area.");return}
+  const context=orderContext();
+  const method=paymentMode||state.paymentMethod;
+  const paid=method==="Cash";
+  const now=new Date().toISOString();
+  const number="R"+String(state.nextOrder++).padStart(4,"0");
+  const items=state.cart.map(l=>Object.assign({},l));
+  const totals=getTotals(items);
+  const order={id:id(),number,type:state.selectedType,table:state.selectedType==="Dine-in"?state.selectedTable:null,customerName:context.customerName,deliveryAddress:context.deliveryAddress,note:context.note,items,subtotal:totals.subtotal,tax:totals.tax,service:totals.service,total:totals.total,createdAt:now,status:"new",paymentStatus:paid?"paid":(method==="Card terminal (test)"?"test-pending":"unpaid"),paymentMethod:method,paidAt:paid?now:null,synced:false,printStatus:{kitchen:"queued",receipt:paid&&state.settings.autoPrintReceipt?"queued":"not-requested"}};
+  state.orders.unshift(order);state.cart=[];persist();
+  if(method==="Card terminal (test)"){
+    notify("Order "+number+" saved. Test terminal is not connected; payment remains pending.");
+  }else if(method==="Pay later"){
+    notify("Order "+number+" sent to kitchen. Payment remains unpaid.");
+  }else if(paymentMode==="kitchen"){
+    notify("Order "+number+" sent to kitchen. Payment remains unpaid.");
+  }else{
+    notify("Order "+number+" recorded as cash-paid (prototype).");
+  }
+  renderPOS();
+}
+function statusName(status){return ({new:"New",preparing:"Preparing",ready:"Ready",completed:"Completed",cancelled:"Cancelled"})[status]||status}
+function statusClass(status){return status==="ready"||status==="completed"?"green":status==="preparing"?"amber":status==="cancelled"?"red":""}
+function renderKitchen(){
+  const root=document.getElementById("view-kitchen");
+  const active=state.orders.filter(o=>!["completed","cancelled"].includes(o.status));
+  const columns=[["new","New"],["preparing","Preparing"],["ready","Ready"]];
+  const colHtml=columns.map(([key,label])=>{
+    const orders=active.filter(o=>o.status===key);
+    const cards=orders.map(o=>'<article class="ticket"><div class="ticket-top"><div><div class="ticket-id">'+escapeHtml(o.number)+'</div><div class="ticket-meta">'+fmtTime(o.createdAt)+' · '+(o.type==="Dine-in"?"Table "+escapeHtml(o.table||"—"):escapeHtml(o.type))+'</div></div><span class="ticket-type">'+escapeHtml(o.type)+'</span></div>'+(o.customerName?'<div class="ticket-meta" style="margin-top:7px">Customer: '+escapeHtml(o.customerName)+'</div>':'')+'<div class="ticket-items">'+o.items.map(it=>'<div class="ticket-item"><strong>'+it.qty+'×</strong><span>'+escapeHtml(it.name)+(it.note?' — '+escapeHtml(it.note):'')+'</span></div>').join("")+'</div>'+(o.note?'<div class="ticket-note">Note: '+escapeHtml(o.note)+'</div>':'')+(o.type==="Delivery"&&o.deliveryAddress?'<div class="ticket-note">Delivery: '+escapeHtml(o.deliveryAddress)+'</div>':'')+'<div class="row-between" style="margin-bottom:9px"><span class="status-tag '+(o.paymentStatus==="paid"?"green":o.paymentStatus==="unpaid"?"amber":"red")+'">'+(o.paymentStatus==="paid"?"Paid":o.paymentStatus==="unpaid"?"Unpaid":o.paymentStatus==="test-pending"?"Terminal pending":"Pending")+'</span><span class="tiny muted">'+money(o.total)+'</span></div><div class="ticket-actions">'+(key==="new"?'<button class="btn soft" data-action="ticket-status" data-id="'+o.id+'" data-status="preparing">Start prep</button>':key==="preparing"?'<button class="btn soft" data-action="ticket-status" data-id="'+o.id+'" data-status="ready">Mark ready</button>':'<button class="btn primary" data-action="ticket-status" data-id="'+o.id+'" data-status="completed">Complete</button>')+(o.paymentStatus!=="paid"?'<button class="btn" data-action="record-cash" data-id="'+o.id+'">Record cash</button>':'')+'</div></article>').join("");
+    return '<div class="kitchen-col"><div class="kitchen-col-head"><span>'+label.toUpperCase()+'</span><span class="count">'+orders.length+'</span></div>'+(cards||'<div class="empty-column">No '+label.toLowerCase()+' tickets</div>')+'</div>';
+  }).join("");
+  root.innerHTML='<div class="kitchen-summary"><div class="count-chip"><strong>'+active.length+'</strong> Active tickets</div><div class="count-chip"><strong>'+active.filter(o=>o.paymentStatus!=="paid").length+'</strong> Awaiting payment</div><div class="count-chip"><strong>'+active.filter(o=>o.printStatus&&o.printStatus.kitchen==="queued").length+'</strong> Kitchen print jobs queued</div><div class="actions" style="margin-left:auto"><button class="btn" data-action="refresh-view">↻ Refresh board</button></div></div><div class="notice" style="margin-bottom:16px">Prototype mode: kitchen tickets are stored in this browser. Live printer delivery will be connected through the local hub in a later step.</div><div class="kitchen-columns">'+colHtml+'</div><div class="panel" style="margin-top:16px"><div class="panel-head"><h3>Recently completed</h3><span class="tiny muted">Last 10 tickets</span></div>'+renderRecentCompleted()+'</div>';
+}
+function renderRecentCompleted(){
+  const list=state.orders.filter(o=>["completed","cancelled"].includes(o.status)).slice(0,10);
+  if(!list.length)return '<div class="empty-state">Completed orders will appear here.</div>';
+  return '<div style="overflow:auto"><table class="list-table"><thead><tr><th>Order</th><th>Type</th><th>Time</th><th>Status</th><th>Payment</th></tr></thead><tbody>'+list.map(o=>'<tr><td><b>'+escapeHtml(o.number)+'</b></td><td>'+escapeHtml(o.type)+'</td><td>'+fmtTime(o.createdAt)+'</td><td><span class="status-tag '+statusClass(o.status)+'">'+statusName(o.status)+'</span></td><td>'+escapeHtml(o.paymentStatus==="paid"?"Paid":o.paymentStatus==="test-pending"?"Terminal pending":"Unpaid")+'</td></tr>').join("")+'</tbody></table></div>';
+}
+function renderMenu(){
+  const root=document.getElementById("view-menu");
+  const cats=state.categories.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join("");
+  const items=state.menu.map(item=>'<div class="menu-admin-item"><div class="prod-emoji">'+escapeHtml(item.emoji||"🍽️")+'</div><div class="menu-admin-info"><b>'+escapeHtml(item.name)+'</b><span>'+escapeHtml(item.category)+' · '+money(item.price)+' · '+escapeHtml(item.route||"Kitchen")+'</span></div><div class="menu-admin-controls"><button class="pill-switch '+(item.available?"on":"")+'" data-action="toggle-availability" data-id="'+escapeHtml(item.id)+'">'+(item.available?"Available":"Sold out")+'</button><button class="btn small" data-action="edit-item" data-id="'+escapeHtml(item.id)+'">Edit</button></div></div>').join("");
+  root.innerHTML='<div class="row-between" style="margin-bottom:16px;flex-wrap:wrap"><div><div class="eyebrow">Product setup</div><h2 style="margin:5px 0 0;font-size:21px">Menu editor</h2><div class="subtitle">Every item can be priced, enabled, and routed to a kitchen destination.</div></div><div class="actions"><button class="btn" data-action="add-category">＋ Category</button><button class="btn primary" data-action="add-item-form">＋ Add menu item</button></div></div><div class="page-grid"><div class="panel"><div class="panel-head"><h3>Menu items</h3><span class="status-tag">'+state.menu.length+' items</span></div><div class="form-section"><div class="menu-admin-grid">'+(items||'<div class="empty-state">No menu items created.</div>')+'</div></div></div><div class="panel"><div class="panel-head"><h3>Quick-add item</h3><span class="badge-demo">Local demo</span></div><form id="addItemForm" class="form-section"><div class="field" style="margin-bottom:12px"><label for="newItemName">Item name</label><input id="newItemName" required maxlength="70" placeholder="e.g. Beef Kare-Kare"></div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label for="newItemPrice">Price (KWD)</label><input id="newItemPrice" required type="number" min="0" step="0.001" placeholder="1.500"></div><div class="field"><label for="newItemCategory">Category</label><select id="newItemCategory">'+cats+'</select></div><div class="field"><label for="newItemEmoji">Icon / emoji</label><input id="newItemEmoji" maxlength="8" value="🍽️"></div><div class="field"><label for="newItemRoute">Kitchen route</label><select id="newItemRoute"><option>Kitchen Printer</option><option>Drinks Printer</option><option>Dessert Printer</option><option>No print</option></select></div></div><div class="field" style="margin-bottom:14px"><label for="newItemDescription">Description</label><input id="newItemDescription" maxlength="120" placeholder="Optional description"></div><button class="btn primary" type="submit" style="width:100%">Save menu item</button><p class="help">Saved to this browser's prototype data. Production menu changes will be stored by the local hub.</p></form><div class="form-section"><h3 class="section-title">Categories</h3><div class="actions">'+state.categories.map(c=>'<span class="status-tag">'+escapeHtml(c)+'</span>').join(" ")+'</div><p class="help">Use Settings → Printing & routing to configure where each category prints.</p></div></div></div>';
+}
+function renderReports(){
+  const root=document.getElementById("view-reports");
+  const today=localDayKey(new Date());
+  const todays=state.orders.filter(o=>localDayKey(new Date(o.createdAt))===today);
+  const paid=todays.filter(o=>o.paymentStatus==="paid"&&o.status!=="cancelled");
+  const sales=paid.reduce((s,o)=>s+o.total,0);
+  const awaiting=state.orders.filter(o=>o.paymentStatus!=="paid"&&o.status!=="cancelled");
+  const productSales={};
+  paid.forEach(o=>o.items.forEach(it=>{productSales[it.name]=(productSales[it.name]||0)+it.qty}));
+  const topItems=Object.entries(productSales).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  root.innerHTML='<div class="row-between" style="margin-bottom:17px;flex-wrap:wrap"><div><div class="eyebrow">Business overview</div><h2 style="margin:5px 0 0;font-size:21px">Sales reports</h2><div class="subtitle">Today · Kuwait local date</div></div><div class="actions"><button class="btn" data-action="export-csv">↓ Export CSV</button><button class="btn" data-action="export-backup">↓ Backup JSON</button></div></div><div class="kpi-grid"><div class="panel kpi"><div class="kpi-top"><span>Paid sales today</span><span class="kpi-icon">↗</span></div><div class="kpi-value">'+money(sales)+'</div><div class="kpi-foot">Confirmed cash in prototype only</div></div><div class="panel kpi"><div class="kpi-top"><span>Orders today</span><span class="kpi-icon">▦</span></div><div class="kpi-value">'+todays.length+'</div><div class="kpi-foot">All order statuses</div></div><div class="panel kpi"><div class="kpi-top"><span>Average paid order</span><span class="kpi-icon">◉</span></div><div class="kpi-value">'+money(paid.length?sales/paid.length:0)+'</div><div class="kpi-foot">Based on paid orders</div></div><div class="panel kpi"><div class="kpi-top"><span>Awaiting payment</span><span class="kpi-icon">◷</span></div><div class="kpi-value">'+awaiting.length+'</div><div class="kpi-foot">Includes test terminal attempts</div></div></div><div class="page-grid"><div class="panel"><div class="panel-head"><h3>Recent orders</h3><span class="tiny muted">'+state.orders.length+' stored</span></div>'+(state.orders.length?'<div style="overflow:auto"><table class="list-table"><thead><tr><th>Order</th><th>Channel</th><th>Total</th><th>Payment</th><th>Kitchen</th></tr></thead><tbody>'+state.orders.slice(0,15).map(o=>'<tr><td><b>'+escapeHtml(o.number)+'</b><div class="tiny muted">'+fmtTime(o.createdAt)+'</div></td><td>'+escapeHtml(o.type)+'</td><td>'+money(o.total)+'</td><td><span class="status-tag '+(o.paymentStatus==="paid"?"green":o.paymentStatus==="unpaid"?"amber":"red")+'">'+(o.paymentStatus==="paid"?"Paid":o.paymentStatus==="unpaid"?"Unpaid":"Test pending")+'</span></td><td><span class="status-tag '+statusClass(o.status)+'">'+statusName(o.status)+'</span></td></tr>').join("")+'</tbody></table></div>':'<div class="empty-state">Take a demo order to start populating reports.</div>')+'</div><div class="panel"><div class="panel-head"><h3>Top items today</h3><span class="tiny muted">By quantity in paid orders</span></div><div class="form-section">'+(topItems.length?topItems.map((item,i)=>'<div class="row-between" style="padding:11px 0;border-bottom:1px solid #f1edef"><div style="display:flex;align-items:center;gap:10px"><span class="count">'+(i+1)+'</span><b style="font-size:11px">'+escapeHtml(item[0])+'</b></div><span class="status-tag">'+item[1]+' sold</span></div>').join(""):'<div class="empty-state">No paid items yet.</div>')+'</div><div class="form-section"><div class="notice">This dashboard is currently using browser-local sample transactions. Cloud remote reports and real payment reconciliation are not connected.</div></div></div></div>';
+}
+function settingNav(){
+  const tabs=[["general","▣","Restaurant"],["printers","▤","Printers & routing"],["charges","%","Charges"],["staff","♙","Staff & permissions"],["backup","◈","Backup & sync"]];
+  return '<div class="panel settings-nav">'+tabs.map(([id,ico,label])=>'<button class="settings-tab '+(state.settingsTab===id?"active":"")+'" data-action="settings-tab" data-tab="'+id+'"><span class="setting-icon">'+ico+'</span>'+label+'</button>').join("")+'</div>';
+}
+function settingContent(){
+  const s=state.settings;
+  if(state.settingsTab==="general")return '<div class="panel settings-content"><div class="panel-head"><h3>Restaurant details</h3><span class="status-tag">Local settings</span></div><form id="settingsForm"><div class="form-section"><div class="form-grid"><div class="field"><label for="s-restaurantName">Restaurant name</label><input id="s-restaurantName" data-setting="restaurantName" value="'+escapeHtml(s.restaurantName)+'" required></div><div class="field"><label for="s-phone">Phone</label><input id="s-phone" data-setting="phone" value="'+escapeHtml(s.phone)+'" placeholder="+965 ..."></div><div class="field"><label for="s-address">Address</label><input id="s-address" data-setting="address" value="'+escapeHtml(s.address)+'"></div><div class="field"><label for="s-currency">Currency</label><select id="s-currency" data-setting="currency"><option value="KWD" selected>KWD — Kuwaiti dinar</option></select></div><div class="field"><label for="s-timezone">Timezone</label><select id="s-timezone" data-setting="timezone"><option value="Asia/Kuwait" selected>Asia/Kuwait</option></select></div><div class="field"><label for="s-footer">Receipt footer</label><input id="s-footer" data-setting="receiptFooter" value="'+escapeHtml(s.receiptFooter)+'"></div></div></div><div class="form-section"><h3 class="section-title">Cashier behavior</h3>'+toggleRow("Auto-print customer receipt","Print after a completed payment","autoPrintReceipt",s.autoPrintReceipt)+toggleRow("Auto-print kitchen ticket","Queue kitchen tickets after sending an order","autoPrintKitchen",s.autoPrintKitchen)+toggleRow("Require a reason for voids","Record the reason and staff member for void operations","requireVoidReason",s.requireVoidReason)+'</div><div class="setting-savebar"><span class="help">Settings save to this browser in the prototype.</span><button class="btn primary" type="submit">Save settings</button></div></form></div>';
+  if(state.settingsTab==="printers")return '<div class="panel settings-content"><div class="panel-head"><h3>Printer setup & kitchen routing</h3><span class="badge-demo">Hardware not connected</span></div><form id="settingsForm"><div class="form-section"><h3 class="section-title">Receipt printer</h3><div class="form-grid"><div class="field"><label for="s-receiptPrinterName">Printer name</label><input id="s-receiptPrinterName" data-setting="receiptPrinterName" value="'+escapeHtml(s.receiptPrinterName)+'"></div><div class="field"><label for="s-receiptPrinterIp">Local IP address</label><input id="s-receiptPrinterIp" data-setting="receiptPrinterIp" value="'+escapeHtml(s.receiptPrinterIp)+'" placeholder="192.168.1.101"></div></div>'+toggleRow("Enable receipt printer","Queue customer receipts for this destination","receiptPrinterEnabled",s.receiptPrinterEnabled)+'</div><div class="form-section"><h3 class="section-title">Kitchen printer</h3><div class="form-grid"><div class="field"><label for="s-kitchenPrinterName">Printer name</label><input id="s-kitchenPrinterName" data-setting="kitchenPrinterName" value="'+escapeHtml(s.kitchenPrinterName)+'"></div><div class="field"><label for="s-kitchenPrinterIp">Local IP address</label><input id="s-kitchenPrinterIp" data-setting="kitchenPrinterIp" value="'+escapeHtml(s.kitchenPrinterIp)+'" placeholder="192.168.1.102"></div></div>'+toggleRow("Enable kitchen printer","Queue kitchen tickets for this destination","kitchenPrinterEnabled",s.kitchenPrinterEnabled)+'</div><div class="form-section"><h3 class="section-title">Category routing</h3><p class="help" style="margin-top:-7px;margin-bottom:13px">In production, these rules will be enforced by the local hub. This prototype stores your selections only.</p><div class="form-grid">'+state.categories.map(c=>'<div class="field"><label for="route-'+escapeHtml(c)+'">'+escapeHtml(c)+' destination</label><select id="route-'+escapeHtml(c)+'" data-route="'+escapeHtml(c)+'"><option '+((s.routing[c]||"Kitchen Printer")==="Kitchen Printer"?"selected":"")+' value="Kitchen Printer">Kitchen Printer</option><option '+((s.routing[c]||"")==="Drinks Printer"?"selected":"")+' value="Drinks Printer">Drinks Printer</option><option '+((s.routing[c]||"")==="Dessert Printer"?"selected":"")+' value="Dessert Printer">Dessert Printer</option><option '+((s.routing[c]||"")==="No print"?"selected":"")+' value="No print">No print</option></select></div>').join("")+'</div><div class="notice" style="margin-top:14px">Before purchasing: verify each printer's supported ESC/POS or vendor protocol, LAN connectivity, cutter support and status reporting. An IP address alone does not connect hardware.</div></div><div class="setting-savebar"><span class="help">Printer test button is a preview only.</span><div class="actions"><button class="btn" type="button" data-action="test-printer">Test print</button><button class="btn primary" type="submit">Save routing</button></div></div></form></div>';
+  if(state.settingsTab==="charges")return '<div class="panel settings-content"><div class="panel-head"><h3>Tax & service charges</h3><span class="status-tag amber">Disabled by default</span></div><form id="settingsForm"><div class="form-section"><div class="notice">Charges are disabled until you confirm the applicable business and tax rules. Enabling a setting below changes prototype calculations only; it does not determine legal tax treatment.</div>'+toggleRow("Enable tax","Apply a configurable percentage to the subtotal","taxEnabled",s.taxEnabled)+'<div class="field" style="max-width:220px;margin:0 0 10px"><label for="s-taxRate">Tax rate (%)</label><input id="s-taxRate" data-setting="taxRate" type="number" min="0" max="100" step="0.01" value="'+Number(s.taxRate||0)+'"></div>'+toggleRow("Enable service charge","Apply a configurable percentage to the subtotal","serviceEnabled",s.serviceEnabled)+'<div class="field" style="max-width:220px;margin-top:10px"><label for="s-serviceRate">Service charge (%)</label><input id="s-serviceRate" data-setting="serviceRate" type="number" min="0" max="100" step="0.01" value="'+Number(s.serviceRate||0)+'"></div></div><div class="setting-savebar"><span class="help">Disabled settings are excluded from order totals.</span><button class="btn primary" type="submit">Save charge settings</button></div></form></div>';
+  if(state.settingsTab==="staff")return '<div class="panel settings-content"><div class="panel-head"><h3>Staff roles & permissions</h3><button class="btn small" data-action="staff-demo">＋ Add staff (demo)</button></div><div class="form-section"><div class="staff-row"><div class="staff-avatar">OW</div><div class="staff-text"><b>Owner / Administrator</b><small>All settings, staff access, backups, reports, voids and refunds</small></div><span class="status-tag green">Full access</span></div><div class="staff-row"><div class="staff-avatar">MG</div><div class="staff-text"><b>Manager</b><small>Orders, approved discounts, voids, cash shifts and reports</small></div><span class="status-tag">Manager</span></div><div class="staff-row"><div class="staff-avatar">CS</div><div class="staff-text"><b>Cashier</b><small>Create orders, take payments and print receipts</small></div><span class="status-tag">Cashier</span></div><div class="staff-row"><div class="staff-avatar">KT</div><div class="staff-text"><b>Kitchen</b><small>View / update kitchen tickets only</small></div><span class="status-tag">Kitchen</span></div></div><div class="form-section"><div class="notice">Role descriptions are illustrative in this UI prototype. Production authentication must be enforced by the local hub; hiding buttons is not security. PIN hashes, session expiry and audit logging will be implemented in the backend.</div>'+toggleRow("Allow cashier discounts","Manager authorization can still be required in production","allowDiscounts",s.allowDiscounts)+toggleRow("Require manager approval for refunds","Prevents cashier-only refund actions","requireManagerRefund",s.requireManagerRefund)+'</div><div class="setting-savebar"><span class="help">No real user accounts or PINs are created yet.</span><button class="btn primary" data-action="save-staff-settings">Save permissions</button></div></div>';
+  return '<div class="panel settings-content"><div class="panel-head"><h3>Local backup & cloud synchronization</h3><span class="status-tag amber">Cloud not connected</span></div><div class="form-section"><div class="kpi-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="panel kpi"><div class="kpi-top"><span>Local orders</span><span class="kpi-icon">▤</span></div><div class="kpi-value">'+state.orders.length+'</div><div class="kpi-foot">Saved in this browser</div></div><div class="panel kpi"><div class="kpi-top"><span>Pending sync</span><span class="kpi-icon">◌</span></div><div class="kpi-value">'+state.orders.filter(o=>!o.synced).length+'</div><div class="kpi-foot">Cloud connector not implemented</div></div></div><div class="notice">This prototype persists its demo data in browser storage only. It is not yet the local POS hub database and does not automatically upload orders. The planned production version will use a local PostgreSQL database, durable outbox, encrypted cloud backups and retry-safe synchronization.</div><div class="actions" style="margin-top:15px"><button class="btn primary" data-action="export-backup">Download local JSON backup</button><button class="btn" data-action="restore-backup">Restore JSON backup</button><button class="btn" data-action="export-csv">Export orders CSV</button></div></div><div class="form-section"><h3 class="section-title">Required production behavior</h3><div class="toggle-row"><div><b>Local hub is the source of truth</b><small>Orders save locally before cloud sync is attempted.</small></div><span class="status-tag green">Required</span></div><div class="toggle-row"><div><b>Durable pending-sync queue</b><small>Retry after internet returns; unique event IDs avoid duplicates.</small></div><span class="status-tag green">Required</span></div><div class="toggle-row"><div><b>Encrypted cloud backup and restore tests</b><small>Keep off-device copies and periodically test recovery.</small></div><span class="status-tag green">Required</span></div></div><div class="setting-savebar"><span class="help">No live sync is claimed by this prototype.</span><button class="btn danger" data-action="reset-demo">Reset demo data</button></div></div>';
+}
+function toggleRow(label,help,key,value){return '<div class="toggle-row"><div><b>'+label+'</b><small>'+help+'</small></div><button class="switch '+(value?"on":"")+'" type="button" role="switch" aria-checked="'+!!value+'" data-action="toggle-setting" data-key="'+key+'"><span></span></button></div>'}
+function renderSettings(){
+  const root=document.getElementById("view-settings");
+  root.innerHTML='<div class="row-between" style="margin-bottom:16px;flex-wrap:wrap"><div><div class="eyebrow">System administration</div><h2 style="margin:5px 0 0;font-size:21px">POS settings</h2><div class="subtitle">The owner will be able to configure these from the production application.</div></div><span class="status-tag amber">Prototype settings only</span></div><div class="settings-grid">'+settingNav()+settingContent()+'</div>';
+}
+function moveTicket(orderId,status){
+  const o=state.orders.find(x=>x.id===orderId);if(!o)return;
+  o.status=status;
+  if(status==="completed")o.completedAt=new Date().toISOString();
+  persist();renderKitchen();notify(o.number+" marked "+statusName(status).toLowerCase()+".");
+}
+function exportBlob(filename,mime,text){
+  const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportBackup(){
+  const backup={format:"restau-pos-prototype-backup",version:1,exportedAt:new Date().toISOString(),state:state};
+  exportBlob("restau-pos-demo-backup-"+new Date().toISOString().slice(0,10)+".json","application/json",JSON.stringify(backup,null,2));
+  notify("Local demo backup downloaded.");
+}
+function exportCSV(){
+  const columns=["order_number","created_at","order_type","table","customer","subtotal_kwd","tax_kwd","service_kwd","total_kwd","payment_status","payment_method","kitchen_status"];
+  const lines=[columns.join(",")].concat(state.orders.map(o=>[o.number,o.createdAt,o.type,o.table||"",o.customerName||"",o.subtotal,o.tax,o.service,o.total,o.paymentStatus,o.paymentMethod,o.status].map(v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"').join(",")));
+  exportBlob("restau-pos-orders-"+new Date().toISOString().slice(0,10)+".csv","text/csv;charset=utf-8",lines.join("\r\n"));
+  notify("Orders CSV downloaded.");
+}
+function editItem(itemId){
+  const item=state.menu.find(x=>x.id===itemId);if(!item)return;
+  const name=prompt("Menu item name:",item.name);if(name===null)return;
+  const priceText=prompt("Price in KWD (e.g. 1.500):",Number(item.price).toFixed(3));if(priceText===null)return;
+  const price=Number(priceText);
+  if(!name.trim()||!Number.isFinite(price)||price<0){notify("Name and a valid non-negative price are required.");return}
+  item.name=name.trim();item.price=Math.round(price*1000)/1000;
+  const route=prompt("Kitchen destination (Kitchen Printer / Drinks Printer / Dessert Printer / No print):",item.route||"Kitchen Printer");
+  if(route!==null&&route.trim())item.route=route.trim();
+  persist();renderMenu();notify("Menu item updated.");
+}
+function makeNewItem(form){
+  const name=document.getElementById("newItemName").value.trim();
+  const price=Number(document.getElementById("newItemPrice").value);
+  if(!name||!Number.isFinite(price)||price<0){notify("Enter a valid item name and price.");return}
+  const category=document.getElementById("newItemCategory").value;
+  const emoji=document.getElementById("newItemEmoji").value.trim()||"🍽️";
+  const route=document.getElementById("newItemRoute").value;
+  const description=document.getElementById("newItemDescription").value.trim();
+  state.menu.push({id:id(),name,category,price:Math.round(price*1000)/1000,emoji,description,route,available:true});
+  persist();renderMenu();notify(name+" added to the menu.");
+}
+document.addEventListener("click",function(event){
+  const nav=event.target.closest("[data-view]");
+  if(nav){switchView(nav.dataset.view);return}
+  const button=event.target.closest("[data-action]");if(!button)return;
+  const action=button.dataset.action;
+  if(action==="add-item"){addItem(button.dataset.id);return}
+  if(action==="order-type"){state.selectedType=button.dataset.type;renderPOS();persist();return}
+  if(action==="select-table"){state.selectedTable=button.dataset.table;renderPOS();persist();return}
+  if(action==="category-filter"){state.categoryFilter=button.dataset.category;renderPOS();return}
+  if(action==="qty"){const l=state.cart.find(x=>x.id===button.dataset.id);if(l){l.qty+=Number(button.dataset.delta);if(l.qty<=0)state.cart=state.cart.filter(x=>x.id!==l.id);persist();renderPOS()}return}
+  if(action==="remove-line"){state.cart=state.cart.filter(x=>x.id!==button.dataset.id);persist();renderPOS();return}
+  if(action==="clear-cart"){state.cart=[];persist();renderPOS();notify("Current order cleared.");return}
+  if(action==="send-kitchen"){state.paymentMethod="Pay later";createOrder("kitchen");return}
+  if(action==="charge-send"){const select=document.getElementById("paymentMethod");state.paymentMethod=select?select.value:"Cash";createOrder(state.paymentMethod);return}
+  if(action==="ticket-status"){moveTicket(button.dataset.id,button.dataset.status);return}
+  if(action==="record-cash"){const order=state.orders.find(x=>x.id===button.dataset.id);if(order){order.paymentStatus="paid";order.paymentMethod="Cash";order.paidAt=new Date().toISOString();order.synced=false;persist();renderKitchen();notify("Cash payment recorded in demo for "+order.number+".")}return}
+  if(action==="refresh-view"){renderKitchen();notify("Kitchen board refreshed from local demo data.");return}
+  if(action==="toggle-availability"){const item=state.menu.find(x=>x.id===button.dataset.id);if(item){item.available=!item.available;persist();renderMenu();notify(item.name+(item.available?" is available.":" marked sold out."))}return}
+  if(action==="edit-item"){editItem(button.dataset.id);return}
+  if(action==="add-item-form"){document.getElementById("newItemName")?.focus();return}
+  if(action==="add-category"){const name=prompt("New category name:");if(name&&name.trim()){const v=name.trim();if(state.categories.some(c=>c.toLowerCase()===v.toLowerCase())){notify("Category already exists.");return}state.categories.push(v);state.settings.routing[v]="Kitchen Printer";persist();renderMenu();notify("Category added.")}return}
+  if(action==="settings-tab"){state.settingsTab=button.dataset.tab;renderSettings();return}
+  if(action==="toggle-setting"){
+    const key=button.dataset.key;state.settings[key]=!state.settings[key];persist();renderSettings();notify("Setting updated locally.");return
+  }
+  if(action==="test-printer"){notify("Preview only: connect a supported printer to the local hub to send a real test print.");return}
+  if(action==="save-staff-settings"){persist();notify("Demo permission settings saved.");return}
+  if(action==="export-backup"){exportBackup();return}
+  if(action==="export-csv"){exportCSV();return}
+  if(action==="restore-backup"){document.getElementById("restoreFile").click();return}
+  if(action==="reset-demo"){if(confirm("Reset all local prototype orders, settings and menu changes to the sample data? Download a backup first if needed.")){localStorage.removeItem(STORAGE_KEY);state=structuredClone(defaults);persist();renderView();notify("Prototype data reset.")}return}
+  if(action==="save-settings"){persist();notify("Settings saved.");return}
+});
+document.addEventListener("input",function(event){
+  if(event.target.id==="menuSearch"){state.search=event.target.value;const pos=document.getElementById("view-pos");const start=event.target.selectionStart;renderPOS();const input=document.getElementById("menuSearch");if(input){input.focus();input.setSelectionRange(start,start)}return}
+});
+document.addEventListener("change",function(event){
+  if(event.target.id==="paymentMethod"){state.paymentMethod=event.target.value;return}
+  const key=event.target.dataset.setting;
+  const route=event.target.dataset.route;
+  if(key){const val=event.target.type==="number"?Number(event.target.value):event.target.value;state.settings[key]=val;persist();return}
+  if(route){state.settings.routing[route]=event.target.value;persist();return}
+});
+document.addEventListener("submit",function(event){
+  if(event.target.id==="addItemForm"){event.preventDefault();makeNewItem(event.target);return}
+  if(event.target.id==="settingsForm"){
+    event.preventDefault();
+    const form=event.target;
+    form.querySelectorAll("[data-setting]").forEach(el=>{const key=el.dataset.setting;state.settings[key]=el.type==="number"?Number(el.value):el.value});
+    form.querySelectorAll("[data-route]").forEach(el=>{state.settings.routing[el.dataset.route]=el.value});
+    persist();renderSettings();notify("Settings saved in local prototype storage.");return
+  }
+});
+document.getElementById("restoreFile").addEventListener("change",async function(event){
+  const file=event.target.files&&event.target.files[0];if(!file)return;
+  try{
+    const parsed=JSON.parse(await file.text());
+    const restored=parsed.state||parsed;
+    if(!restored||!Array.isArray(restored.menu)||!Array.isArray(restored.orders))throw new Error("Not a RESTAU POS backup");
+    if(!confirm("Replace the current browser prototype data with this backup?"))return;
+    state=Object.assign(structuredClone(defaults),restored,{settings:Object.assign(structuredClone(defaults.settings),restored.settings||{})});
+    persist();renderView();notify("Prototype backup restored.");
+  }catch(e){notify("Restore failed. Choose a valid RESTAU POS JSON backup.")}finally{event.target.value=""}
+});
+window.addEventListener("online",updateHeader);window.addEventListener("offline",updateHeader);
+switchView(state.view||"pos");
+})();
+</script>
+</body>
+</html>
