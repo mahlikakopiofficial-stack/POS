@@ -1,0 +1,44 @@
+name: POS preview deployment
+
+on:
+  push:
+    branches:
+      - feat/tablet-pos-ui-prototype
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+      - name: Check prototype JavaScript and required UI
+        run: node scripts/check-inline-js.mjs
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Upload static frontend
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - name: Deploy preview
+        id: deployment
+        uses: actions/deploy-pages@v4
